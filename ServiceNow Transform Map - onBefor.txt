@@ -1,0 +1,21 @@
+/* ServiceNow Transform Map - onBefore script */
+(function runTransformScript(source, map, log, target) {
+    var firstName = (source.first_name || '').toString().trim();
+    var lastName = (source.last_name || '').toString().trim();
+    var email = (source.email || '').toString().trim().toLowerCase();
+    var department = (source.department || '').toString().trim();
+    var status = (source.status || '').toString().trim();
+
+    if (!firstName || !email) {
+        log.warn('Skipping row: first name or email is missing.');
+        ignore = true;
+        return;
+    }
+
+    target.u_employee_id = (source.employee_id || '').toString().trim();
+    target.u_first_name = firstName;
+    target.u_last_name = lastName;
+    target.u_email = email;
+    target.u_department = department;
+    target.u_status = status || 'Active';
+})(source, map, log, target);
